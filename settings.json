@@ -1,0 +1,11 @@
+{
+	"meetupKey":"",
+	"eventBriteKey":"",
+	"twitter":{
+		"consumerKey":"",
+		"consumerSecret":"",
+		"accessToken":"",
+		"accessTokenSecret":""
+	}
+	
+}
