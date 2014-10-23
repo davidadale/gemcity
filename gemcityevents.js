@@ -2,7 +2,7 @@ if (Meteor.isClient) {
   // counter starts at 0
   Session.setDefault("counter", 0);
 
-  Template.hello.helpers({
+/*  Template.hello.helpers({
     counter: function () {
       return Session.get("counter");
     },
@@ -18,11 +18,27 @@ if (Meteor.isClient) {
       // increment the counter when button is clicked
       Session.set("counter", Session.get("counter") + 1);
     }
-  });
+  });*/
 
   Template.techEvents.helpers({
     techEvents: function(){
-      return [] // replace this with the list of events.
+
+      Event = function(doc){
+        _.extend( this, doc );
+      }
+
+      Event.prototype = {
+        constructor: Event,
+        showTime:function(){
+          return moment( this.time ).format("MM/DD/YYYY hh:mm a")
+        },
+        howLong:function(){
+          return moment.duration( this.duration ).humanize()
+        }
+      }
+
+      return Events.find({},{transform:function(doc){ return new Event(doc) } })
+
     }
   })
 

@@ -33,6 +33,7 @@ minimongo@1.0.3
 mobile-status-bar@1.0.0
 mongo@1.0.6
 mrt:cron@0.0.1
+mrt:moment@2.8.1
 mrt:twit@0.2.0
 observe-sequence@1.0.2
 ordered-dict@1.0.0

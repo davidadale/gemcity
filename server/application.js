@@ -2,6 +2,12 @@
 
 Meteor.startup(function () {
 
+    return Meteor.methods({
+      removeAllEvents: function() {
+        return Events.remove({});
+      }
+    });  
+
 });
 
 
@@ -19,31 +25,52 @@ var tweet = function(){
 	})
   
 }
+/*
+  Date using moment
 
+  console.log( moment(1414099800000).format("MM-DD-YYYY hh:mm"))  
+
+*/
 //var postToTwitter = function()
 
 var queryMeetup = function(){
 
 	var meetupBaseUrl = "https://api.meetup.com"
 	var meetupKey = Meteor.settings.meetupKey
-	var queryString = "state=ohio&city=dayton&topic_id=34"
+	var queryString = "state=ohio&city=dayton&category_id=34"
 	var url = meetupBaseUrl + "/2/concierge?"+queryString+"&key=" + meetupKey
-
+  
 	HTTP.call("GET", url,
+
           function ( error, result ) {
 
           	
           	for( i=0; i<result.data.results.length; i++ ){
-          		var eventObj = result.data.results[i]
-          		console.log( "Meetup object event id: " + eventObj.id )
-          		console.log( "Status of event: " + eventObj.status)
+          		
+              var eventObj = result.data.results[i]
+
+              var newEvent = {eventId:eventObj.id, description:eventObj.description,
+                url:eventObj.event_url, duration:eventObj.duration,
+                title:eventObj.name, time: eventObj.time,
+                syndicated:false }
+
+              if( typeof eventObj.venue != "undefined" ){
+                newEvent.address = {name:eventObj.venue.name,state:eventObj.venue.state,
+                  addressLine1:eventObj.venue.address_1,
+                  city:eventObj.venue.city}
+              }
+
+              var existing = Events.findOne({eventId:newEvent.eventId })
+              if( typeof existing == "undefined"){
+                Events.insert( newEvent )  
+              }
+
           	}
 
 
           });	
-
-
 }
+
 
 var world = function () {
   console.log('World!');
